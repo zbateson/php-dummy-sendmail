@@ -1,0 +1,6 @@
+From: person@example.com
+To: another-person@example.com
+Subject: Test email
+
+This is my wonderfully simple test email.
+This is its second line

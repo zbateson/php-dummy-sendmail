@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    require __DIR__ . '/vendor/autoload.php';
+} else {
+    fwrite(STDERR, 'ERROR: Composer dependencies not properly set up! Run "composer install" or see README.md for more details' . PHP_EOL);
+}
+
+use PDS\SendMailCommand;
+use PDS\PDSApplication;
+
+$application = new PDSApplication;
+$application->add(new SendMailCommand('sendmail'));
+$application->run();

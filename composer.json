@@ -1,0 +1,20 @@
+{
+    "name": "zbateson/php-dummy-sendmail",
+    "description": "sendmail dummy for testing written in PHP",
+    "keywords": ["testing", "sendmail", "php mail"],
+    "homepage": "https://github.com/zbateson/php-dummy-sendmail",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Zaahid Bateson",
+            "email": "zbateson@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "symfony/console": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {"PDS\\": "src/PDS"}
+    },
+    "bin": ["sendmail"]
+}
