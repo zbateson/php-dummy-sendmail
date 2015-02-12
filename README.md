@@ -24,7 +24,7 @@ composer install
 
 To create the phar archive, after cloning, use clue/phar-composer and run
 phar-composer build to create php-dummy-sendmail.phar.  Once created, optionally
-move it /usr/local/bin or configure sendmail with php
+move it to /usr/local/bin or configure sendmail with php
 path/to/php-dummy-sendmail.phar.
 
 ```bash
