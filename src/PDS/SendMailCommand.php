@@ -65,7 +65,8 @@ class SendMailCommand extends Command
                 null,
                 InputOption::VALUE_NONE,
                 'If set, prints the email to the output stream instead of printing a file'
-            );
+            )
+            ->ignoreValidationErrors();
     }
     
     protected function getIncrementedFileName($file)

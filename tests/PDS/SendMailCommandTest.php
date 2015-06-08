@@ -82,9 +82,25 @@ class SendMailCommandTest extends \PHPUnit_Framework_TestCase
                 '--input-file' => '../data/email.txt',
                 '--increment-file' => $randIncr
             ], ['verbosity' => 4]);
-            $this->assertContains("[Debug] outFile=$next.txt", $tester->getDisplay());
-            $this->assertFileEquals(dirname(__DIR__) . "/output/$next.txt", dirname(__DIR__) . '/data/email.txt');
+            $this->assertContains("[Debug] outFile=$next.mime", $tester->getDisplay());
+            $this->assertFileEquals(dirname(__DIR__) . "/output/$next.mime", dirname(__DIR__) . '/data/email.txt');
             ++$next;
         }
+    }
+    
+    public function testWithNonExistentParameters()
+    {
+        $tester = new CommandTester($this->command);
+        $tester->execute([
+            '--directory' => dirname(__DIR__) . '/output',
+            '--input-file' => '../data/email.txt',
+            '-f' => 'test@example.com'
+        ], ['verbosity' => 4]);
+        
+        $this->assertRegExp('/\[Debug\] outFile=.*/', $tester->getDisplay());
+        preg_match('/\[Debug\] outFile=(.*)/', $tester->getDisplay(), $matches);
+        
+        $file = $matches[1];
+        $this->assertFileEquals(dirname(__DIR__) . '/output/' . $file, dirname(__DIR__) . '/data/email.txt');
     }
 }

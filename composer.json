@@ -10,6 +10,9 @@
             "email": "zbateson@users.noreply.github.com"
         }
     ],
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
     "require": {
         "symfony/console": "dev-master"
     },
