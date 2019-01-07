@@ -1,10 +1,21 @@
 #!/usr/bin/env php
 <?php
-if (file_exists(__DIR__ . '/vendor/autoload.php')) {
-    require __DIR__ . '/vendor/autoload.php';
-} else {
-    fwrite(STDERR, 'ERROR: Composer dependencies not properly set up! Run "composer install" or see README.md for more details' . PHP_EOL);
+// copied from phpunit
+foreach ([__DIR__ . '/../../autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/vendor/autoload.php'] as $file) {
+    if (file_exists($file)) {
+        define('SENDMAIL_COMPOSER_INSTALL', $file);
+        break;
+    }
 }
+
+unset($file);
+
+if (!defined('SENDMAIL_COMPOSER_INSTALL')) {
+    fwrite(STDERR, 'ERROR: Composer dependencies not properly set up! Run "composer install" or see README.md for more details' . PHP_EOL);
+    die(1);
+}
+
+require SENDMAIL_COMPOSER_INSTALL;
 
 use PDS\SendMailCommand;
 use PDS\PDSApplication;
@@ -12,3 +23,5 @@ use PDS\PDSApplication;
 $application = new PDSApplication;
 $application->add(new SendMailCommand('sendmail'));
 $application->run();
+
+unset($application);
