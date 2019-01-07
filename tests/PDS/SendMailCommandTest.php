@@ -3,20 +3,24 @@
 use PDS\SendMailCommand;
 use PDS\PDSApplication;
 use Symfony\Component\Console\Tester\CommandTester;
+use Symfony\Component\Console\Output\OutputInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Description of SendMailCommandTest
  *
  * @author Zaahid Bateson <zbateson@gmail.com>
  */
-class SendMailCommandTest extends \PHPUnit_Framework_TestCase
+class SendMailCommandTest extends TestCase
 {
+    protected $application;
     protected $command;
     
     public function __construct()
     {
+        parent::__construct();
         $application = new PDSApplication;
-        $application->add(new SendMailCommand);
+        $application->add(new SendMailCommand());
         $this->command = $application->find('sendmail');
     }
     
@@ -26,11 +30,11 @@ class SendMailCommandTest extends \PHPUnit_Framework_TestCase
         $tester->execute([
             '--directory' => dirname(__DIR__) . '/output',
             '--input-file' => '../data/email.txt'
-        ], ['verbosity' => 4]);
-        
+        ], ['verbosity' => OutputInterface::VERBOSITY_DEBUG]);
+
         $this->assertRegExp('/\[Debug\] outFile=.*/', $tester->getDisplay());
         preg_match('/\[Debug\] outFile=(.*)/', $tester->getDisplay(), $matches);
-        
+
         $file = $matches[1];
         $this->assertFileEquals(dirname(__DIR__) . '/output/' . $file, dirname(__DIR__) . '/data/email.txt');
     }
@@ -41,9 +45,10 @@ class SendMailCommandTest extends \PHPUnit_Framework_TestCase
         
         // PHPUnit's expectOutputString doesn't apply cause we're not using echo it seems
         $tester->execute([
-            '--input-file' => './data/email.txt',
+            '--directory' => dirname(__DIR__) . '/output',
+            '--input-file' => '../data/email.txt',
             '--print' => true
-        ], ['verbosity' => 4]);
+        ], ['verbosity' => OutputInterface::VERBOSITY_DEBUG]);
         
         $this->assertContains('[Debug] printing to php://stdout', $tester->getDisplay());
         $this->assertContains('[Debug] outFile=php://stdout', $tester->getDisplay());
@@ -57,7 +62,7 @@ class SendMailCommandTest extends \PHPUnit_Framework_TestCase
             '--input-file' => '../data/email.txt',
             '--timestamp' => 'YmdHisu',
             '--file-extension' => '.mime'
-        ], ['verbosity' => 4]);
+        ], ['verbosity' => OutputInterface::VERBOSITY_DEBUG]);
         
         $this->assertRegExp('/\[Debug\] outFile=\d{20}\.mime/', $tester->getDisplay());
         preg_match('/\[Debug\] outFile=(.*)/', $tester->getDisplay(), $matches);
@@ -81,7 +86,7 @@ class SendMailCommandTest extends \PHPUnit_Framework_TestCase
                 '--directory' => dirname(__DIR__) . '/output',
                 '--input-file' => '../data/email.txt',
                 '--increment-file' => $randIncr
-            ], ['verbosity' => 4]);
+            ], ['verbosity' => OutputInterface::VERBOSITY_DEBUG]);
             $this->assertContains("[Debug] outFile=$next.mime", $tester->getDisplay());
             $this->assertFileEquals(dirname(__DIR__) . "/output/$next.mime", dirname(__DIR__) . '/data/email.txt');
             ++$next;
@@ -95,7 +100,7 @@ class SendMailCommandTest extends \PHPUnit_Framework_TestCase
             '--directory' => dirname(__DIR__) . '/output',
             '--input-file' => '../data/email.txt',
             '-f' => 'test@example.com'
-        ], ['verbosity' => 4]);
+        ], ['verbosity' => OutputInterface::VERBOSITY_DEBUG]);
         
         $this->assertRegExp('/\[Debug\] outFile=.*/', $tester->getDisplay());
         preg_match('/\[Debug\] outFile=(.*)/', $tester->getDisplay(), $matches);

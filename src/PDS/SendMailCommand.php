@@ -90,7 +90,7 @@ class SendMailCommand extends Command
     {
         $email = $input->getArgument('to');
         $dir = rtrim($input->getOption('directory'), '/') . '/';
-        
+
         // changing dir so input and output file names don't need to have a full
         // path (like increment file can be specified relatively)
         if (!empty($dir)) {
